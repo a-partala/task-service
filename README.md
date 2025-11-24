@@ -1,9 +1,6 @@
 # Task Service
 REST microservice for task management in a distributed system.
 
-This service is a part of a multi-service architecture (with user-service as an authentication provider).
-Implements business logic of creating, assigning, starting, and completing tasks.
-
 ## Technologies
 Java 21, Spring Boot (Web, Security, Data JPA), PostgreSQL, Docker, JUnit, Mockito, Maven, Lombok
 
@@ -15,6 +12,7 @@ Java 21, Spring Boot (Web, Security, Data JPA), PostgreSQL, Docker, JUnit, Mocki
 - Clean architecture: controller -> service -> repository
 
 ## Package structure
+```
 net.partala.taskservice
 ├── auth/
 │   └── jwt/
@@ -25,8 +23,10 @@ net.partala.taskservice
 ├── exception/
 ├── task/
 └── user/
+```
 
 ## API endpoints
+```
 GET /tasks?...              - search tasks with filters: creatorId, assignedUserId, status, priority, pageSize, pageNum
 GET /tasks/{id}             - get task by id
 POST /tasks                 - create task
@@ -34,14 +34,18 @@ POST /tasks/{id}/start      - start task or assign user to it
 POST /tasks/{id}/complete   - mark task as completed
 PUT /tasks/{id}             - change task data
 DELETE /tasks/{id}          - delete task
+```
 
 ## Run locally
 Prerequisite:
 - PostgreSQL running locally
+```
 mvn clean install
 mvn spring-boot:run
+```
 
 ## Request Examples
+```
 POST /tasks
 {
   "title": "create front-end",
@@ -60,3 +64,4 @@ PUT /tasks/{id}
   "deadlineDate": "2028-10-10T00:00:00",
   "priority": "HIGH"
 }
+```
