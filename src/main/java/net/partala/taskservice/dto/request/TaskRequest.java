@@ -12,7 +12,7 @@ public record TaskRequest(
         @NotBlank
         String title,
         @Future
-        LocalDateTime deadlineDataTime,
+        LocalDateTime deadlineDateTime,
         @NotNull
         TaskPriority priority
 ) {

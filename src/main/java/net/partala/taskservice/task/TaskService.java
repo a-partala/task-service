@@ -60,7 +60,7 @@ public class TaskService {
         taskToSave.setCreatedAt(LocalDateTime.now());
 
         taskToSave.setTitle(request.title());
-        taskToSave.setDeadlineDateTime(request.deadlineDataTime());
+        taskToSave.setDeadlineDateTime(request.deadlineDateTime());
         taskToSave.setPriority(request.priority());
         var savedTaskEntity = repository.save(taskToSave);
 
@@ -86,7 +86,7 @@ public class TaskService {
 
         taskEntity.setTitle(request.title());
         taskEntity.setPriority(request.priority());
-        taskEntity.setDeadlineDateTime(request.deadlineDataTime());
+        taskEntity.setDeadlineDateTime(request.deadlineDateTime());
 
         var updatedTask = repository.save(taskEntity);
 
