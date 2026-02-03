@@ -1,5 +1,6 @@
 package net.partala.taskservice.config;
 
+import net.partala.taskservice.auth.jwt.JwtAuthEntryPoint;
 import net.partala.taskservice.auth.jwt.JwtAuthenticationFilter;
 import net.partala.taskservice.user.UserRole;
 import org.springframework.context.annotation.Bean;
@@ -21,9 +22,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig{
 
     private final JwtAuthenticationFilter jwtAuthentificationFilter;
+    private final JwtAuthEntryPoint authEntryPoint;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthentificationFilter) {
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthentificationFilter, JwtAuthEntryPoint authEntryPoint) {
         this.jwtAuthentificationFilter = jwtAuthentificationFilter;
+        this.authEntryPoint = authEntryPoint;
     }
 
     @Bean
@@ -35,6 +38,7 @@ public class SecurityConfig{
                         .requestMatchers("/admin/**").hasAuthority(UserRole.ADMIN.name())
                         .anyRequest().authenticated()
                 )
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(authEntryPoint))
                 .addFilterBefore(jwtAuthentificationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

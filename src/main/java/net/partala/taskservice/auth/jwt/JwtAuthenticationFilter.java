@@ -7,8 +7,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import net.partala.taskservice.auth.SecurityUser;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -20,9 +22,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private static final String TOKEN_TYPE = "Bearer ";
+    private final AuthenticationEntryPoint authEntryPoint;
 
-    public JwtAuthenticationFilter(JwtService jwtService) {
+    public JwtAuthenticationFilter(JwtService jwtService, AuthenticationEntryPoint authEntryPoint) {
         this.jwtService = jwtService;
+        this.authEntryPoint = authEntryPoint;
     }
 
     @Override
@@ -60,6 +64,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         } catch (ExpiredJwtException e) {
             throw new AccessDeniedException("Token is expired", e);
+        } catch (Exception e) {
+            authEntryPoint.commence(request, response, new BadCredentialsException(e.getMessage()));
         }
 
         filterChain.doFilter(request, response);
