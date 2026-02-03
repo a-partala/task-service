@@ -34,4 +34,6 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
             @Param("priority") TaskPriority priority,
             Pageable pageable
     );
+
+    long countByAssignedUserId(Long userId);
 }

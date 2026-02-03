@@ -146,7 +146,7 @@ public class TaskService {
     }
 
     private boolean canUserTakeTask(Long userId) {
-        long tasksCount = repository.getAllTasksAssignedToUser(userId).size();
+        long tasksCount = repository.countByAssignedUserId(userId);
         return tasksCount < assignedTasksLimit;
     }
 
