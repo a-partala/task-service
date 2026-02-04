@@ -6,8 +6,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import net.partala.taskservice.auth.SecurityUser;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -48,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if(SecurityContextHolder.getContext().getAuthentication() == null) {
 
                 if(jwtService.extractPurpose(token) != TokenPurpose.ACCESS) {
-                    throw new AccessDeniedException("Token purpose is not allowed for this operation");
+                    throw new BadCredentialsException("Invalid token format or signature");
                 }
 
                 var userId = jwtService.extractUserId(token);
@@ -63,9 +63,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
         } catch (ExpiredJwtException e) {
-            throw new AccessDeniedException("Token is expired", e);
+            authEntryPoint.commence(request, response, new CredentialsExpiredException("Token expired"));
         } catch (Exception e) {
-            authEntryPoint.commence(request, response, new BadCredentialsException(e.getMessage()));
+            authEntryPoint.commence(request, response, new BadCredentialsException("Invalid token format or signature"));
         }
 
         filterChain.doFilter(request, response);
