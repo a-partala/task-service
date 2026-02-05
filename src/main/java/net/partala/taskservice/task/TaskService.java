@@ -54,14 +54,14 @@ public class TaskService {
             TaskRequest request,
             TaskActor actor
     ) {
-        var taskToSave = new TaskEntity();
-        taskToSave.setCreatorId(actor.getId());
-        taskToSave.setStatus(TaskStatus.CREATED);
-        taskToSave.setCreatedAt(LocalDateTime.now());
+        var taskToSave = TaskEntity.builder()
+            .creatorId(actor.getId())
+            .status(TaskStatus.CREATED)
+            .priority(request.priority())
+            .title(request.title())
+            .deadlineDateTime(request.deadlineDateTime())
+            .build();
 
-        taskToSave.setTitle(request.title());
-        taskToSave.setDeadlineDateTime(request.deadlineDateTime());
-        taskToSave.setPriority(request.priority());
         var savedTaskEntity = repository.save(taskToSave);
 
         var savedTask = mapper.toResponse(savedTaskEntity);
