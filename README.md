@@ -1,6 +1,9 @@
 # Task Service
 REST microservice for task management in a distributed system.
 
+> **Note:** This service is designed to run within the [Orchestra](https://github.com/a-partala/orchestra) ecosystem.<br><br>
+> Please follow the **[Quick Start Guide](https://github.com/a-partala/orchestra#quick-start)** to spin up the system.
+
 ## Technologies
 Java 21, Spring Boot (Web, Security, Data JPA), PostgreSQL, Docker, JUnit, Mockito, Maven, Lombok
 
@@ -34,14 +37,6 @@ POST /tasks/{id}/start      - start task or assign user to it
 POST /tasks/{id}/complete   - mark task as completed
 PUT /tasks/{id}             - change task data
 DELETE /tasks/{id}          - delete task
-```
-
-## Run locally
-Prerequisite:
-- PostgreSQL running locally
-```
-mvn clean install
-mvn spring-boot:run
 ```
 
 ## Request Examples
